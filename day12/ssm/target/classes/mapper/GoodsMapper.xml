@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.xiaoshu.dao.GoodsMapper">
+ 
+ <select id="findAll" parameterType="com.xiaoshu.vo.GoodsVo" resultType="com.xiaoshu.vo.GoodsVo">
+
+	select g.*,
+	t.typename as tname
+	from
+	goods g,goodstype t
+	where
+	g.tid=t.tid	
+ 	
+ 	<if test="name!=null and name!=''">
+ 		and g.name like '%${name}%'
+ 	</if>
+ 	
+ 	<if test="tid!=null and tid!=''">
+ 		and g.tid=#{tid}
+ 	</if>
+ 	
+ </select>
+ 
+ <select id="tongji" resultType="com.xiaoshu.vo.GoodsVo" >
+ 
+	select
+	m.typename as tname,
+	COUNT(s.tid) as num
+	from
+	goodstype m
+	LEFT JOIN
+	goods s
+	on m.tid=s.tid
+	GROUP BY m.tid
+ </select>
+ 
+</mapper>

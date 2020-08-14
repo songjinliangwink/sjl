@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.xiaoshu.dao.ExpressPersonMapper">
+  
+  <select id="findAll" parameterType="com.xiaoshu.vo.PersonVo" resultType="com.xiaoshu.vo.PersonVo">
+	select
+	p.id,p.experss_name,p.sex,p.experss_trait,p.create_time,p.experss_time,c.id
+	as cid,c.express_name as cname,p.express_type_id as pid
+	from
+	express_person p
+	LEFT JOIN
+	express_company c
+	ON
+	p.express_type_id=c.id  
+	<where>
+	<if test="experssName!=null and experssName!=''">
+		and p.experss_name like '%${experssName}%'
+	</if>
+	
+	<if test="expressTypeId!=null and expressTypeId!=''">
+		AND (p.express_type_id = #{expressTypeId} and c.status=1)
+	</if>
+	
+	<if test="start!=null">
+		and p.experss_time &gt;= #{start}
+	</if>
+	
+	<if test="end!=null">
+		and p.experss_time &lt;= #{end}
+	</if>
+	
+	</where>	
+  </select>
+  
+  <select id="tongji" resultType="com.xiaoshu.vo.PersonVo">
+	select
+	c.express_name as cname,
+	count(p.express_type_id) as num
+	from
+	express_company c
+	LEFT JOIN
+	express_person p
+	ON
+	c.id=p.express_type_id
+	GROUP BY c.id
+  	
+  </select>
+
+  <select id="tongji1" resultType="com.xiaoshu.vo.PersonVo">
+	select
+	c.express_name as cname,
+	count(p.express_type_id) as num
+	from
+	express_company c
+	LEFT JOIN
+	express_person p
+	ON
+	c.id=p.express_type_id
+	GROUP BY c.id
+  </select>
+  
+  
+</mapper> 

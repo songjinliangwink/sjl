@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.xiaoshu.dao.DeviceMapper">
+ 	
+ 	<select id="findAll" parameterType="com.xiaoshu.vo.DeviceVo" resultType="com.xiaoshu.vo.DeviceVo">
+<!-- 	SELECT d.*,
+	t.typename as tname
+	FROM
+	device d
+	LEFT JOIN
+	devicetype t
+	on
+	d.devicetypeId=t.devicetypeId -->
+
+	select d.*,
+	t.typename as tname
+	FROM
+	device d,devicetype t
+	WHERE
+	d.devicetypeId=t.devicetypeId
+	
+	
+	
+	<if test="devicename!=null and devicename!=''">
+		and d.devicename like '%${devicename}%'
+	</if>	
+	
+	<if test="status!=null and status!=''">
+		and d.status=#{status}
+	</if>
+		
+ 	</select>
+ 	
+ 	<select id="existUserWithUserName" parameterType="String" resultType="device">
+ 		select * from device where devicename=#{devicename}
+ 	</select>
+ 	
+ 	<select id="tongji" resultType="com.xiaoshu.vo.DeviceVo">
+	select
+	t.typename as tname,
+	count(d.devicetypeId) as num
+	from
+	devicetype t
+	LEFT JOIN
+	device d
+	ON
+	t.devicetypeId=d.devicetypeId
+	GROUP BY t.devicetypeId		
+ 	</select>
+ 	
+</mapper>

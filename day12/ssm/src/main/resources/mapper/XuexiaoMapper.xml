@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.xiaoshu.dao.XuexiaoMapper">
+ 	
+ 	<select id="findAll" parameterType="com.xiaoshu.vo.XuexiaoVo" resultType="com.xiaoshu.vo.XuexiaoVo">
+	select x.*,
+	c.areaname as aname
+	from
+	xuexiao x, chengshi c
+	where
+	x.areaid=c.id
+
+	<if test="schoolname!=null and schoolname!=''">
+		and(x.schoolname like '%${schoolname}%' or x.address like '%${schoolname}%' or x.phone like '%${schoolname}%')
+	</if>
+
+ 	</select>
+ 
+ 	<select id="findByName" parameterType="String" resultType="xuexiao">
+ 		select * from xuexiao where schoolname=#{schoolname}
+ 	</select>
+ 
+</mapper>
